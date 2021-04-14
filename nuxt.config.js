@@ -1,4 +1,7 @@
-export default {
+// eslint-disable-next-line no-undef
+// eslint-disable-next-line nuxt/no-cjs-in-config
+module.exports = {
+  dev: process.env.NODE_ENV !== 'production',
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'app-mt',
@@ -14,6 +17,7 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    'element-ui/lib/theme-chalk/reset.css',
     'element-ui/lib/theme-chalk/index.css'
   ],
 
@@ -56,6 +60,9 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    transpile: [/^element-ui/]
-  }
+    transpile: [/^element-ui/],
+    // 加快编译速度
+    Cache: true
+  },
+  telemetry: false
 }
