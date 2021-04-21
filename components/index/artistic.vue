@@ -119,17 +119,17 @@ export default {
         const keyword = dom.getAttribute('keyword')
         const { status, data: { count, pois } } = await self.$axios.get('/search/resultsByKeywords', {
           params: {
-            keyword,
+            type: keyword,
             city: self.$store.state.geo.position.city
           }
         })
         if (status === 200 && count > 0) {
-          const r = pois.filter(item => item.photos.length).map((item) => {
+          const r = pois.map((item) => {
             return {
               title: item.name,
-              pos: item.type.split(';')[0],
-              price: item.biz_ext.cost || '暂无',
-              img: item.photos[0].url,
+              pos: item.module,
+              price: item.areaCode,
+              img: 'http://p0.meituan.net/codeman/00c8bc1c25fbcc6d0651b29a2057a8c1560658.png',
               url: '//abc.com'
             }
           })
