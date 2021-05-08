@@ -1,7 +1,7 @@
 import Router from 'koa-router'
 import Poi from '../dbs/models/poi'
-import axios from './utils/axios'
-import sign from './utils/sign'
+// import axios from './utils/axios'
+// import sign from './utils/sign'
 
 const router = new Router({ prefix: '/search' })
 
@@ -130,34 +130,56 @@ router.get('/resultsByKeywords', async (ctx) => {
 })
 
 router.get('/products', async (ctx) => {
-  const keyword = ctx.query.keyword || '旅游'
-  const city = ctx.query.city || '北京'
-  const {
-    status,
-    data: {
-      product,
-      more
-    }
-  } = await axios.get('http://cp-tools.cn/search/products', {
-    params: {
-      keyword,
+  const { city, keyword } = ctx.query
+  try {
+    const product = await Poi.find({
       city,
-      sign
-    }
-  })
-  if (status === 200) {
+      name: keyword
+    }).limit(10)
+
     ctx.body = {
+      code: 200,
       product,
-      more: ctx.isAuthenticated() ? more : [],
+      more: ctx.isAuthenticated() ? [] : [],
       login: ctx.isAuthenticated()
     }
-  } else {
+  } catch (e) {
     ctx.body = {
+      code: -1,
       product: {},
-      more: ctx.isAuthenticated() ? more : [],
+      more: ctx.isAuthenticated() ? [] : [],
       login: ctx.isAuthenticated()
     }
   }
+
+  // const keyword = ctx.query.keyword || '旅游'
+  // const city = ctx.query.city || '北京'
+  // const {
+  //   status,
+  //   data: {
+  //     product,
+  //     more
+  //   }
+  // } = await axios.get('http://cp-tools.cn/search/products', {
+  //   params: {
+  //     keyword,
+  //     city,
+  //     sign
+  //   }
+  // })
+  // if (status === 200) {
+  //   ctx.body = {
+  //     product,
+  //     more: ctx.isAuthenticated() ? more : [],
+  //     login: ctx.isAuthenticated()
+  //   }
+  // } else {
+  //   ctx.body = {
+  //     product: {},
+  //     more: ctx.isAuthenticated() ? more : [],
+  //     login: ctx.isAuthenticated()
+  //   }
+  // }
 })
 
 export default router
