@@ -89,13 +89,12 @@ router.get('/hotPlace', async (ctx) => {
 })
 
 router.get('/resultsByKeywords', async (ctx) => {
-  const { city, type } = ctx.query
+  const { city, keyword } = ctx.query
   try {
     const result = await Poi.find({
       city,
-      type
+      name: keyword
     }).limit(10)
-    console.log(result)
 
     ctx.body = {
       code: 200,
